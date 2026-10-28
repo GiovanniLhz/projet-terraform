@@ -1,6 +1,6 @@
-# Automatisation d'un conteneur Nginx avec Terraform
+# Déploiement automatisé avec Terraform et Docker
 
-Ce projet utilise Terraform pour déployer un conteneur Nginx sur une VM Ubuntu Server, avec le provider Docker. Au lieu de lancer les commandes Docker une par une, je décris l'infrastructure dans un fichier `main.tf` et Terraform s'occupe du reste. C'est la quatrième étape de mon projet évolutif. Le détail de ma démarche est dans [JOURNAL.md](JOURNAL.md).
+Ce projet utilise Terraform et son provider Docker pour automatiser le déploiement d'un conteneur Nginx sur une VM Ubuntu Server. Au lieu de lancer les commandes Docker une par une, je décris l'infrastructure dans un fichier `main.tf` et Terraform s'occupe du reste. C'est la quatrième étape de mon projet évolutif. Le détail complet de ma démarche se trouve dans le [JOURNAL.md](JOURNAL.md).
 
 ## Objectif
 
