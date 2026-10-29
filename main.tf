@@ -2,35 +2,30 @@
 terraform {
   required_providers {
     docker = {
-      # Source officielle du provider Docker
-      source  = "kreuzwerker/docker"
-      # Version compatible avec l'API Docker de la VM
-      version = "2.25.0"
+      source  = "kreuzwerker/docker" # Source officielle HashiCorp
+      version = "2.25.0"             # Version du provider (plugin)
     }
   }
 }
 
-# Initialisation du provider Docker (utilise /var/run/docker.sock)
-provider "docker" {}
-
-# Image Nginx à télécharger
-resource "docker_image" "nginx" {
-  # Nom de l'image sur Docker Hub
-  name         = "nginx:alpine"
-  # Supprime l'image du disque lors d'un 'terraform destroy'
-  keep_locally = false
+# Connexion au Daemon Docker local via le socket Unix
+provider "docker" {
+  host = "unix:///var/run/docker.sock"
 }
 
-# Conteneur Nginx à lancer
-resource "docker_container" "nginx_web" {
-  # Récupère l'ID de l'image Nginx ci-dessus
-  image = docker_image.nginx.image_id
-  # Nom du conteneur dans 'docker ps'
-  name  = "mon-serveur-terraform"
+# Téléchargement de l'image Nginx (version alpine, ultra légère) depuis le Docker Hub
+resource "docker_image" "nginx" {
+  name         = "nginx:alpine"
+  keep_locally = false # Supprime l'image lors d'un terraform destroy
+}
 
-  # Redirection de port (8081 sur la VM -> 80 dans le conteneur)
+# Déploiement et configuration du conteneur
+resource "docker_container" "nginx_web" {
+  name  = "mon_serveur_terraform"  # Nom visible via "docker ps"
+  image = docker_image.nginx.image_id # Référence l'image définie ci-dessus
+
   ports {
-    internal = 80
-    external = 8082
+    internal = 80   # Port interne du conteneur (Nginx)
+    external = 8082 # Port externe sur la VM (redirection)
   }
 }
