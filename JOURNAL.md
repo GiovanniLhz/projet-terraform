@@ -1,31 +1,24 @@
-# Journal de Bord Projet Évolutif Sciensano
+# Journal du  Projet Terraform 
 
-## Session 4 : Automatisation d'Infrastructure avec Terraform
+## 1. Mise en route & Architecture Terraform
+* **Environnement :** Prise en main de Terraform directement sur ma VM Ubuntu Server (`192.168.56.101`).
+* **Logique IaC :** Utilisation de l'approche déclarative. Au lieu de lancer les commandes Docker à la main, je décris l'infrastructure voulue dans le fichier `main.tf` et Terraform s'occupe de l'appliquer.
+* **Le traducteur :** Utilisation du provider Docker (`kreuzwerker/docker`) pour permettre à Terraform de dialoguer avec le Daemon Docker local.
 
-### 1. Ingestion & Architecture Terraform
-* Initialisation et prise en main de Terraform sur l'environnement Ubuntu Server (`192.168.56.101`).
-* Utilisation du provider Docker pour gérer l'infrastructure de conteneurs de manière déclarative.
-* Structuration du code Terraform via le fichier principal `main.tf`.
+## 2. Contenu du Fichier de Configuration (`main.tf`)
+* **Bloc Provider & Moteur :** 
+  * Initialisation du provider Terraform et téléchargement du plugin depuis le registre officiel HashiCorp (version `2.25.0`).
+* **Ressource Image :** 
+  * L'équivalent du `FROM` dans un Dockerfile : Terraform demande au Daemon Docker d'aller chercher et télécharger l'image `nginx:alpine` (choisie pour sa légèreté) sur le Docker Hub.
+* **Ressource Conteneur :** 
+  * Création du conteneur nommé `mon_serveur_terraform` basé sur l'image définie juste avant.
+  * **Redirection des ports (`ports`) :** Configuration du mapping pour lier le port interne `80` (où écoute Nginx) vers un port externe accessible sur la machine.
 
-### 2. Rédaction du Fichier de Configuration (`main.tf`)
-* **Provider & Docker Image :**
-  * Configuration du provider `kreuzwerker/docker`.
-  * Téléchargement automatique de l'image officielle Nginx (`nginx:latest`).
-* **Ressource Conteneur :**
-  * Création du conteneur nommé `mon-site-nginx`.
-  * Mappage des ports : exposition externe du port `8080` redirigeant vers le port `80` du conteneur.
+## 3. Exécution & Commandes CLI
+* `terraform init` : Initialise le répertoire et télécharge automatiquement le provider nécessaire.
+* `terraform plan` : Affiche le plan d'exécution pour valider ce que Terraform s'apprête à faire avant de modifier quoi que ce soit.
+* `terraform apply` : Lance le déploiement effectif de l'infrastructure sur le serveur.
 
-### 3. Execution & Automatisation CLI
-* Initialisation du répertoire de travail via `terraform init`.
-* Validation du plan d'exécution avec `terraform plan`.
-* Déploiement effectif du conteneur web via `terraform apply -auto-approve`.
-
-### 4. Gestion de Version & Publication GitHub
-* Configuration du fichier `.gitignore` pour exclure les fichiers d'état locaux (`.terraform/`, `*.tfstate*`).
-* Initialisation du dépôt Git local, création des commits et branche `main`.
-* Configuration de l'authentification SSH sécurisée avec GitHub.
-* Publication du projet sur le dépôt distant (`projet-terraform`).
-
-### 5. Validation & Contrôle Qualité
-* Vérification du statut du conteneur via `docker ps`.
-* Validation de l'accès au service web via `curl http://localhost:8080` et depuis le navigateur hôte.
+## 4. Validation & Contrôle
+* **Vérification du conteneur :** Utilisation de `docker ps` pour s'assurer que le conteneur tourne bien.
+* **Test d'accès :** Vérification de la page web via le navigateur ou un `curl` sur l'IP et le port configurés.
