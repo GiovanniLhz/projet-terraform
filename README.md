@@ -48,7 +48,3 @@ Tester le résultat :
 ```bash
 curl http://localhost:8080
 ```
-
-## Notes
-
-Les fichiers d'état (`terraform.tfstate`) ne sont pas versionnés, ils restent en local. Pour réutiliser le projet, adapte l'adresse IP et les ports si besoin.
