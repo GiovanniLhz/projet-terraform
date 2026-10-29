@@ -6,7 +6,6 @@ L'objectif de ce projet est d'utiliser Terraform et son provider Docker pour aut
 ## Fichiers
 
 - `main.tf` : décrit le provider Docker, l'image Nginx et le conteneur
-- `.gitignore` : exclut les fichiers d'état locaux de Terraform (`.terraform/`, `*.tfstate*`)
 - `JOURNAL.md` : mon journal de bord
 
 ## Environnement
